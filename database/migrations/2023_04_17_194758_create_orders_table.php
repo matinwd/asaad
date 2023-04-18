@@ -14,7 +14,10 @@ return new class extends Migration
 	{
 		Schema::create('orders', function(Blueprint $table) {
             $table->increments('id');
-
+            $table->string('name');
+            $table->string('email');
+            $table->text('description');
+            $table->enum('status',['read','unread','answered']);
             $table->timestamps();
 		});
 	}
