@@ -14,12 +14,6 @@ return new class extends Migration
 	{
 		Schema::create('posts', function(Blueprint $table) {
             $table->increments('id');
-
-            // Todo -- Add these fields to translation table
-            $table->string('title');
-            $table->text('description');
-            $table->string('tags');
-
             $table->string('slug')->unique();
             $table->json('images');
             $table->timestamps();

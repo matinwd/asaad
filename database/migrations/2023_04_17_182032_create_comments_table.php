@@ -14,13 +14,7 @@ return new class extends Migration
 	{
 		Schema::create('comments', function(Blueprint $table) {
             $table->increments('id');
-
             $table->foreignId('user_id')->constrained()->nullOnDelete()->cascadeOnUpdate();
-
-            // Todo -- Add these fields to translation table
-            $table->text('description');
-
-            // Todo -- make this shit cleaner later :)
             $table->foreignId('post_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->json('data');
 

@@ -14,7 +14,6 @@ return new class extends Migration
 	{
 		Schema::create('sliders', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
             $table->json('images');
             $table->unsignedTinyInteger('order');
             $table->boolean('status');
