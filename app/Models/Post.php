@@ -4,11 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
-class Post extends Model implements Transformable
+class Post extends Model
 {
-    use HasFactory, TransformableTrait;
+    use HasFactory;
 
+    public $translatedAttributes = [
+        'name',
+        'text'
+    ];
+
+    protected $fillable = [
+        'slug',
+        'images',
+    ];
+
+    public function categories()
+    {
+        return $this->morphToMany(Category::class,'categorizable');
+    }
 }

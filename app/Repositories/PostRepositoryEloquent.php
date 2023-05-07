@@ -2,11 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\Post;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\PostRepository;
-use App\Entities\Post;
-use App\Validators\PostValidator;
 
 /**
  * Class PostRepositoryEloquent.
@@ -26,23 +24,11 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
-
-        return PostValidator::class;
-    }
-
-
-    /**
      * Boot up the repository, pushing criteria
      */
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
 }

@@ -11,15 +11,15 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @package namespace App\Models;
  */
-class Comment extends Model implements Transformable
+class Comment extends Model
 {
-    use TransformableTrait;
+    public $translatedAttributes = [ 'description'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [];
+
+    protected $fillable = [
+        'user_id',
+        'post_id',
+        'data'
+    ];
 
 }

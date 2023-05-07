@@ -13,7 +13,7 @@ return new class extends Migration
 	public function up()
 	{
 		Schema::create('sliders', function(Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->json('images');
             $table->unsignedTinyInteger('order');
             $table->boolean('status');

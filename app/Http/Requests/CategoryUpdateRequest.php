@@ -6,13 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,7 +15,19 @@ class CategoryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'images' => 'nullable|mimes:jpg,png,svg',
+            'en.*' => 'required',
+            'de.*' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'en.name.required' => trans('The English name field is required.'),
+            'en.description.required' => trans('The English description field is required.'),
+            'de.name.required' => trans('The Dutch name field is required.'),
+            'de.description.required' => trans('The Dutch description field is required.'),
         ];
     }
 }

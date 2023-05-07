@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+return new class extends Migration
+{
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('products', function(Blueprint $table) {
+            $table->id();
+            $table->string('slug');
+            $table->string('tags');
+            $table->json('images');
+            $table->tinyInteger('visibility')->default(1);
+            $table->tinyInteger('price_status')->default(1)->comment('0 for Coming soon - 1 for Normal (Price) - 2 for call - 3 for stop build');
+            $table->unsignedDecimal('price',15,2)->nullable();
+            $table->unsignedDecimal('discount')->nullable();
+            $table->enum('discount_type',['fixed','percent'])->default('fixed');
+            $table->decimal('special_price')->nullable();
+            $table->enum('special_price_type',['fixed','percent'])->nullable();
+            $table->date('special_price_start')->nullable();
+            $table->date('special_price_end')->nullable();
+            $table->unsignedTinyInteger('in_stock')->default(0);
+            $table->unsignedTinyInteger('manage_stock')->default(0);
+            $table->unsignedSmallInteger('qty')->default(0);
+            $table->json('features')->nullable();
+            $table->json('properties')->nullable();
+            $table->json('options')->nullable();
+            $table->enum('shop_guide_type',['disable','start','override','end','default'])->default('default');
+            $table->text('shop_guide')->nullable();
+            $table->unsignedInteger('view_count')->default(0);
+            $table->unsignedInteger('sales_integer')->default(0);
+            $table->unsignedSmallInteger('is_active')->default(1);
+            $table->softDeletes();
+            $table->timestamps();
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('products');
+	}
+};

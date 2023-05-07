@@ -3,23 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
-
 /**
  * Class Slider.
  *
  * @package namespace App\Models;
  */
-class Slider extends Model implements Transformable
+class Slider extends Model
 {
-    use TransformableTrait;
+    protected $fillable = [
+        'images',
+        'order',
+        'status'
+    ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [];
 
+public $translatedAttributes = [
+    'name'
+];
 }

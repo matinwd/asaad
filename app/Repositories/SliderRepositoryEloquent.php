@@ -4,9 +4,7 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\SliderRepository;
 use App\Models\Slider;
-use App\Validators\SliderValidator;
 
 /**
  * Class SliderRepositoryEloquent.
@@ -25,16 +23,6 @@ class SliderRepositoryEloquent extends BaseRepository implements SliderRepositor
         return Slider::class;
     }
 
-    /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
-
-        return SliderValidator::class;
-    }
 
 
     /**
@@ -44,5 +32,5 @@ class SliderRepositoryEloquent extends BaseRepository implements SliderRepositor
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
 }

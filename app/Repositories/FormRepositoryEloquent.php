@@ -4,9 +4,7 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\FormRepository;
 use App\Models\Form;
-use App\Validators\FormValidator;
 
 /**
  * Class FormRepositoryEloquent.
@@ -25,16 +23,6 @@ class FormRepositoryEloquent extends BaseRepository implements FormRepository
         return Form::class;
     }
 
-    /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
-
-        return FormValidator::class;
-    }
 
 
     /**
@@ -44,5 +32,5 @@ class FormRepositoryEloquent extends BaseRepository implements FormRepository
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
 }

@@ -4,9 +4,7 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\SettingRepository;
 use App\Models\Setting;
-use App\Validators\SettingValidator;
 
 /**
  * Class SettingRepositoryEloquent.
@@ -25,17 +23,6 @@ class SettingRepositoryEloquent extends BaseRepository implements SettingReposit
         return Setting::class;
     }
 
-    /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
-
-        return SettingValidator::class;
-    }
-
 
     /**
      * Boot up the repository, pushing criteria
@@ -44,5 +31,5 @@ class SettingRepositoryEloquent extends BaseRepository implements SettingReposit
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
 }
