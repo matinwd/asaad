@@ -21,4 +21,6 @@ Route::middleware(['auth','role.basic:admin|developer'])->group(function (){
     Route::resource('users',\App\Http\Controllers\Admin\UserController::class);
     Route::resource('products',\App\Http\Controllers\Admin\ProductController::class);
     Route::resource('categories',\App\Http\Controllers\Admin\CategoryController::class);
+    Route::resource('questions',\App\Http\Controllers\Admin\QuestionController::class);
+    Route::resource('comments',\App\Http\Controllers\Admin\CommentController::class);
 });

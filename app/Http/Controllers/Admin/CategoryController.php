@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Criteria\NameCriteria;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryUpdateRequest;
@@ -19,7 +20,10 @@ class CategoryController extends Controller
 
     public function index()
     {
+        $this->repository->pushCriteria(new NameCriteria(request('name')));
+
         $categories = $this->repository->paginate();
+
         return view('admin.pages.category.list', compact('categories'));
     }
 

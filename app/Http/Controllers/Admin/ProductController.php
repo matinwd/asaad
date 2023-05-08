@@ -48,6 +48,11 @@ class ProductController extends Controller
             $attributes = $request->all();
             $attributes['images'] = $images;
 
+
+            if($request->price_status != 1){
+                $attributes['price'] = null;
+            }
+
             $categories = $this->categoryRepository->findWhereIn('id',$attributes['categories']);
 
             $product = $this->repository->create($attributes);
@@ -98,6 +103,11 @@ class ProductController extends Controller
             if($request->hasFile('images')) {
                 $images = $this->saveFiles($request->file('images'));
                 $attributes['images'] = $images;
+            }
+
+            if($request->price_status != 1){
+                $attributes['price'] = null;
+
             }
 
             $product = $this->repository->update($attributes, $id);

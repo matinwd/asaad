@@ -2,33 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Criteria\NameCriteria;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\QuestionCreateRequest;
 use App\Http\Requests\QuestionUpdateRequest;
 use App\Repositories\QuestionRepository;
 
-/**
- * Class QuestionController.
- *
- * @package namespace App\Http\Controllers;
- */
 class QuestionController extends Controller
 {
-    /**
-     * @var QuestionRepository
-     */
     protected $repository;
 
-    /**
-     * QuestionController constructor.
-     *
-     * @param QuestionRepository $repository
-     */
     public function __construct(QuestionRepository $repository)
     {
         $this->repository = $repository;
@@ -36,25 +19,16 @@ class QuestionController extends Controller
 
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $questions = $this->repository->all();
+        $this->repository->pushCriteria(new NameCriteria(request('name')));
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $questions,
-            ]);
-        }
-
-        return view('questions.index', compact('questions'));
+        $questions = $this->repository->paginate();
+        return view('admin.pages.question.list', compact('questions'));
     }
 
 
     public function store(QuestionCreateRequest $request)
     {
         try {
-
-
             $question = $this->repository->create($request->all());
 
             $response = [
@@ -62,21 +36,10 @@ class QuestionController extends Controller
                 'data'    => $question->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
             return redirect()->back()->with('message', $response['message']);
         } catch (\Exception $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            dd($e);
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
@@ -84,21 +47,19 @@ class QuestionController extends Controller
     {
         $question = $this->repository->find($id);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $question,
-            ]);
-        }
-
         return view('questions.show', compact('question'));
+    }
+
+    public function create()
+    {
+        return view('admin.pages.question.create');
     }
 
     public function edit($id)
     {
         $question = $this->repository->find($id);
 
-        return view('questions.edit', compact('question'));
+        return view('admin.pages.question.edit', compact('question'));
     }
 
 
@@ -113,37 +74,15 @@ class QuestionController extends Controller
                 'data'    => $question->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
             return redirect()->back()->with('message', $response['message']);
         } catch (\Exception $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
     public function destroy($id)
     {
         $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Question deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
 
         return redirect()->back()->with('message', 'Question deleted.');
     }

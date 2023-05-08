@@ -1,6 +1,6 @@
 @extends('layouts.main',['activeMenu' => 2])
 
-@section('title','Categories')
+@section('title','Comments')
 
 @section('page-styles')
 @stop
@@ -34,11 +34,10 @@
                             <div>
                                 <input type="text"
                                        class="form-control form-control-sm form-control-solid"
-                                       placeholder="Category name"
+                                       placeholder="Comment name"
                                        name="name" value="{{ old('name',request('name')) }}"/>
                             </div>
                         </div>
-                          
                         <div class="d-flex justify-content-end">
                             <button type="buttonn"
                                     class="btn btn-sm btn-light btn-active-light-primary me-2"
@@ -52,7 +51,7 @@
                 </form>
             </div>
         </div>
-        <a href="{{ route('admin.categories.create') }}" class="btn btn-success">Create Category</a>
+        <a href="{{ route('admin.comments.create') }}" class="btn btn-success">Create Comment</a>
     </div>
 @stop
 
@@ -61,11 +60,11 @@
         <div class="col-12">
             <div class="card card-flush min-h-300px">
                 <div class="card-body py-4">
-                    @includeIf('admin.pages.category.partials.table',$categories)
+                    @includeIf('admin.pages.comment.partials.table',$comments)
                 </div>
-                @if ($categories->lastPage() > 1)
+                @if ($comments->lastPage() > 1)
                     <div class="card-footer">
-                        {!! $categories->render() !!}
+                        {!! $comments->render() !!}
                     </div>
                 @endif
             </div>

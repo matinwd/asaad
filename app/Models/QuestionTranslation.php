@@ -11,6 +11,6 @@ class QuestionTranslation extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['title','description'];
+    protected $fillable = ['name','description'];
 
 }

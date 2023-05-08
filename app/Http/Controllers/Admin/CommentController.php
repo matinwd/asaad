@@ -3,142 +3,72 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
+use App\Traits\FileUploaderTrait;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\CommentCreateRequest;
 use App\Http\Requests\CommentUpdateRequest;
 use App\Repositories\CommentRepository;
 
-/**
- * Class CommentController.
- *
- * @package namespace App\Http\Controllers;
- */
 class CommentController extends Controller
 {
-    /**
-     * @var CommentRepository
-     */
+    use FileUploaderTrait;
     protected $repository;
 
-    /**
-     * CommentController constructor.
-     *
-     * @param CommentRepository $repository
-     */
     public function __construct(CommentRepository $repository)
     {
         $this->repository = $repository;
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $comments = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $comments,
-            ]);
-        }
-
-        return view('comments.index', compact('comments'));
+        $comments = $this->repository->paginate();
+        return view('admin.pages.comment.list', compact('comments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param CommentCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     *
-     */
     public function store(CommentCreateRequest $request)
     {
         try {
+            $attributes = $request->all();
 
+            if($request->hasFile('images')) {
+                $images = $this->saveFiles($request->file('images'));
+                $attributes['images'] = $images;
+            }
 
-            $comment = $this->repository->create($request->all());
+            $comment = $this->repository->create($attributes);
 
             $response = [
                 'message' => 'Comment created.',
                 'data'    => $comment->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return redirect()->route('admin.comments.index')->with('message', $response['message']);
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $comment = $this->repository->find($id);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $comment,
-            ]);
-        }
-
         return view('comments.show', compact('comment'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $comment = $this->repository->find($id);
 
-        return view('comments.edit', compact('comment'));
+        return view('admin.pages.comment.edit', compact('comment'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param CommentUpdateRequest $request
-     * @param string $id
-     *
-     * @return Response
-     *
-     */
+    public function create()
+    {
+        return view('admin.pages.comment.create');
+    }
+
     public function update(CommentUpdateRequest $request, $id)
     {
         try {
-
 
             $comment = $this->repository->update($request->all(), $id);
 
@@ -147,45 +77,17 @@ class CommentController extends Controller
                 'data'    => $comment->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
             return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
 
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
 
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Comment deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
 
         return redirect()->back()->with('message', 'Comment deleted.');
     }

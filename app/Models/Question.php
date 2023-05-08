@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 
 
 class Question extends Model
 {
-    public $translatedAttributes = ['title','description'];
+    use Translatable;
+
+    protected $fillable = [
+        'created_at','updated_at'
+    ];
+
+    public $translatedAttributes = ['name','description'];
 }

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('question_translations', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('name');
             $table->text('description');
-            $table->foreignId('category_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('question_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('locale')->index();
             $table->timestamps();
         });
