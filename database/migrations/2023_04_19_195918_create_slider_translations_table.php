@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('slider_translations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('category_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('slider_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('locale')->index();
             $table->timestamps();
         });

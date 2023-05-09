@@ -25,7 +25,7 @@ class ProductCreateRequest extends FormRequest
             'special_price_start' => 'nullable|date',
             'special_price_end' => 'nullable|date',
             'properties' => 'nullable',
-            'categories' => 'required',
+            'categories' => 'nullable',
             'categories.*' => 'numeric'
 
         ];

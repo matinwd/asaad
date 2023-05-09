@@ -387,7 +387,7 @@
                                     @endforeach
 
                                 </select>
-                                @error('price')
+                                @error('categories')
                                 <div class="invalid-feedback d-block">
                                     {{ $message }}
                                 </div>

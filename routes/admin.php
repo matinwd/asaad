@@ -23,4 +23,11 @@ Route::middleware(['auth','role.basic:admin|developer'])->group(function (){
     Route::resource('categories',\App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('questions',\App\Http\Controllers\Admin\QuestionController::class);
     Route::resource('comments',\App\Http\Controllers\Admin\CommentController::class);
+    Route::resource('posts',\App\Http\Controllers\Admin\PostController::class);
+    Route::resource('sliders',\App\Http\Controllers\Admin\SliderController::class);
+    Route::put('toggle-product/{id}',[\App\Http\Controllers\Admin\ProductController::class,'toggleHide'])->name('products.hide');
+    Route::put('toggle-comment/{id}',[\App\Http\Controllers\Admin\CommentController::class,'toggleHide'])->name('comments.hide');
+    Route::put('toggle-post/{id}',[\App\Http\Controllers\Admin\PostController::class,'toggleHide'])->name('posts.hide');
+    Route::put('toggle-slider/{id}',[\App\Http\Controllers\Admin\SliderController::class,'toggleHide'])->name('sliders.hide');
+    Route::post('file-upload',\App\Http\Controllers\Admin\FileController::class);
 });

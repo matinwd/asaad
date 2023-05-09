@@ -38,6 +38,23 @@
                                        name="name" value="{{ old('name',request('name')) }}"/>
                             </div>
                         </div>
+                        <div class="mb-10">
+                            <label class="form-label fw-bold">Visibility Status :</label>
+                            <div class="nav-group nav-group-fluid">
+                                <label>
+                                    <input {{ request('visibility') == null ? 'checked' : ''  }} type="radio" name="visibility" value="" class="btn-check">
+                                    <span class="btn btn-sm btn-color-muted btn-active btn-active-primary">All</span>
+                                </label>
+                                <label>
+                                    <input {{ request('visibility') == '1' ? 'checked' : ''  }} type="radio" name="visibility" value="1" class="btn-check">
+                                    <span class="btn btn-sm btn-color-muted btn-active btn-active-primary">Visible</span>
+                                </label>
+                                <label>
+                                    <input {{ request('visibility') === '0' && request('visibility') !== false ? 'checked' : ''  }} type="radio" name="visibility" value="0" class="btn-check">
+                                    <span class="btn btn-sm btn-color-muted btn-active btn-active-primary px-4">Hidden</span>
+                                </label>
+                            </div>
+                        </div>
                         <div class="d-flex justify-content-end">
                             <button type="buttonn"
                                     class="btn btn-sm btn-light btn-active-light-primary me-2"

@@ -7,6 +7,7 @@ use App\Criteria\VisibilityCriteria;
 use App\Http\Controllers\Controller;
 use App\Repositories\CategoryRepository;
 use App\Traits\FileUploaderTrait;
+use App\Traits\VisibilityChangerTrait;
 use Illuminate\Http\Request;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\ProductCreateRequest;
@@ -15,7 +16,7 @@ use App\Repositories\ProductRepository;
 
 class ProductController extends Controller
 {
-    use FileUploaderTrait;
+    use FileUploaderTrait,VisibilityChangerTrait;
     /**
      * @var ProductRepository
      */
@@ -53,11 +54,13 @@ class ProductController extends Controller
                 $attributes['price'] = null;
             }
 
-            $categories = $this->categoryRepository->findWhereIn('id',$attributes['categories']);
 
             $product = $this->repository->create($attributes);
 
-            $product->categories()->saveMany($categories);
+            if(isset($attributes['categories'])) {
+                $categories = $this->categoryRepository->findWhereIn('id', $attributes['categories']);
+                $product->categories()->saveMany($categories);
+            }
 
             $response = [
                 'message' => 'Product created.',
@@ -133,4 +136,5 @@ class ProductController extends Controller
 
         return redirect()->back()->with('message', 'Product deleted.');
     }
+
 }

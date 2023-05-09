@@ -13,10 +13,12 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 class NameCriteria implements CriteriaInterface
 {
     public $name;
+    public $hasTranslation;
 
-    public function __construct($name)
+    public function __construct($name,$hasTranslation = true)
     {
         $this->name = $name;
+        $this->hasTranslation = $hasTranslation;
     }
 
     /**
@@ -31,8 +33,10 @@ class NameCriteria implements CriteriaInterface
     {
         if($this->name){
              $queryItem = '%' . $this->name . '%';
-
-            $model = $model->whereTranslationLike('name',$queryItem);
+            if($this->hasTranslation)
+                $model = $model->whereTranslationLike('name',$queryItem);
+            else
+                $model = $model->where('name','like',$queryItem);
         }
         return $model;
     }

@@ -12,7 +12,7 @@ class CommentCreateRequest extends FormRequest
             'post_id' => 'required_if:comment_section,post',
             'name' => 'required:min:2',
             'comment_section' => 'required|in:main,post',
-            'images' => 'required|mimes:svg,png,jpeg,jpg',
+            'images' => 'nullable|mimes:svg,png,jpeg,jpg',
             'description' => 'required:min:2',
         ];
     }

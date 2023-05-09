@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->json('images');
             $table->unsignedTinyInteger('order');
+            $table->unsignedTinyInteger('visibility');
             $table->boolean('status');
             $table->timestamps();
 		});

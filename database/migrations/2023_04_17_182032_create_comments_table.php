@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('post_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->json('images')->nullable();
             $table->json('data')->nullable();
-            $table->enum('visibility',['visible','hidden'])->default('visible');
+            $table->tinyInteger('visibility')->default(1);
             $table->timestamps();
         });
     }

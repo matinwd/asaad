@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('post_translations', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('name');
             $table->text('description');
             $table->string('tags');
             $table->foreignId('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();

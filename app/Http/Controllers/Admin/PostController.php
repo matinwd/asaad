@@ -2,33 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Criteria\NameCriteria;
+use App\Criteria\VisibilityCriteria;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostUpdateRequest;
+use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
+use App\Traits\FileUploaderTrait;
+use App\Traits\VisibilityChangerTrait;
 
-/**
- * Class PostsController.
- *
- * @package namespace App\Http\Controllers;
- */
 class PostController extends Controller
 {
-    /**
-     * @var PostRepository
-     */
+    use FileUploaderTrait,VisibilityChangerTrait;
+
     protected $repository;
 
-    /**
-     * PostsController constructor.
-     *
-     * @param PostRepository $repository
-     */
     public function __construct(PostRepository $repository)
     {
         $this->repository = $repository;
@@ -36,114 +25,102 @@ class PostController extends Controller
 
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $posts = $this->repository->all();
+        $this->repository->pushCriteria(new VisibilityCriteria(request('visibility')));
+        $this->repository->pushCriteria(new NameCriteria(request('name')));
 
-        if (request()->wantsJson()) {
+        $posts = $this->repository->paginate();
 
-            return response()->json([
-                'data' => $posts,
-            ]);
-        }
-
-        return view('posts.index', compact('posts'));
+        return view('admin.pages.post.list', compact('posts'));
     }
 
-    public function store(PostCreateRequest $request)
+    public function store(PostCreateRequest $request,CategoryRepository $categoryRepository)
     {
         try {
 
+            $images = $this->saveFiles($request->file('images'));
 
-            $post = $this->repository->create($request->all());
+            $attributes = $request->all();
+            $attributes['images'] = $images;
+
+
+            $post = $this->repository->create($attributes);
+
+            if(isset($attributes['categories'])) {
+                $categories = $categoryRepository->findWhereIn('id', $attributes['categories']);
+                $post->categories()->saveMany($categories);
+            }
+
 
             $response = [
                 'message' => 'Post created.',
                 'data'    => $post->toArray(),
             ];
 
-            if ($request->wantsJson()) {
+            // TODO | add this flash message for every controller
+            flash()->success(trans('actions.update_success'));
 
-                return response()->json($response);
-            }
 
-            return redirect()->back()->with('message', $response['message']);
+            return redirect()->route('')->with('message', $response['message']);
         } catch (\Exception $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            report($e);
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
-    public function show($id)
+    public function create(CategoryRepository $categoryRepository)
     {
-        $post = $this->repository->find($id);
+        $categories = $categoryRepository->all();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $post,
-            ]);
-        }
-
-        return view('posts.show', compact('post'));
+        return view('admin.pages.post.create',compact('categories'));
     }
 
     public function edit($id)
     {
         $post = $this->repository->find($id);
 
-        return view('posts.edit', compact('post'));
+        return view('admin.pages.post.edit', compact('post'));
     }
 
 
-    public function update(PostUpdateRequest $request, $id)
+    public function update(PostUpdateRequest $request, $id,CategoryRepository $categoryRepository)
     {
         try {
 
 
-            $post = $this->repository->update($request->all(), $id);
+            $attributes = $request->all();
+
+
+            if($request->hasFile('images')) {
+                $images = $this->saveFiles($request->file('images'));
+                $attributes = $request->all();
+                $attributes['images'] = $images;
+            }
+
+            $post = $this->repository->update($attributes, $id);
+
+
+            if(isset($attributes['categories'])) {
+                $categories = $categoryRepository->findWhereIn('id', $attributes['categories']);
+                $post->categories()->saveMany($categories);
+            }
+
 
             $response = [
                 'message' => 'Post updated.',
                 'data'    => $post->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return redirect()->route('admin.posts.index')->with('message', $response['message']);
         } catch (\Exception $e) {
 
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
     public function destroy($id)
     {
         $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Post deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
 
         return redirect()->back()->with('message', 'Post deleted.');
     }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Traits\FileUploaderTrait;
+use App\Traits\VisibilityChangerTrait;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -19,9 +21,8 @@ use App\Repositories\SliderRepository;
  */
 class SliderController extends Controller
 {
-    /**
-     * @var SliderRepository
-     */
+    use FileUploaderTrait,VisibilityChangerTrait;
+
     protected $repository;
 
     public function __construct(SliderRepository $repository)
@@ -29,71 +30,47 @@ class SliderController extends Controller
         $this->repository = $repository;
     }
 
-
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $sliders = $this->repository->all();
+        $sliders = $this->repository->paginate();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $sliders,
-            ]);
-        }
-
-        return view('sliders.index', compact('sliders'));
+        return view('admin.pages.slider.list', compact('sliders'));
     }
 
     public function store(SliderCreateRequest $request)
     {
         try {
+            $attributes = $request->all();
+            $images = $this->saveFiles($request->file('images'));
+
+            $attributes['images'] = $images;
 
 
-            $slider = $this->repository->create($request->all());
+            $slider = $this->repository->create($attributes);
+
 
             $response = [
                 'message' => 'Slider created.',
                 'data'    => $slider->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return redirect()->route('admin.sliders.index')->with('message', $response['message']);
         } catch (\Exception $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
-    public function show($id)
+    public function create()
     {
-        $slider = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $slider,
-            ]);
-        }
-
-        return view('sliders.show', compact('slider'));
+        return view('admin.pages.slider.create');
     }
 
     public function edit($id)
     {
         $slider = $this->repository->find($id);
 
-        return view('sliders.edit', compact('slider'));
+        return view('admin.pages.slider.edit', compact('slider'));
     }
 
     public function update(SliderUpdateRequest $request, $id)
@@ -107,23 +84,11 @@ class SliderController extends Controller
                 'data'    => $slider->toArray(),
             ];
 
-            if ($request->wantsJson()) {
 
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return redirect()->route('admin.sliders.index')->with('message', $response['message']);
         } catch (ValidatorException $e) {
 
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
@@ -131,14 +96,6 @@ class SliderController extends Controller
   public function destroy($id)
     {
         $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Slider deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
 
         return redirect()->back()->with('message', 'Slider deleted.');
     }

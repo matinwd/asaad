@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Criteria\NameCriteria;
+use App\Criteria\VisibilityCriteria;
 use App\Http\Controllers\Controller;
 use App\Traits\FileUploaderTrait;
+use App\Traits\VisibilityChangerTrait;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\CommentCreateRequest;
 use App\Http\Requests\CommentUpdateRequest;
@@ -11,7 +14,8 @@ use App\Repositories\CommentRepository;
 
 class CommentController extends Controller
 {
-    use FileUploaderTrait;
+    use FileUploaderTrait,VisibilityChangerTrait;
+
     protected $repository;
 
     public function __construct(CommentRepository $repository)
@@ -20,6 +24,9 @@ class CommentController extends Controller
     }
     public function index()
     {
+        $this->repository->pushCriteria(new VisibilityCriteria(request('visibility')));
+        $this->repository->pushCriteria(new NameCriteria(request('name'),false));
+
         $comments = $this->repository->paginate();
         return view('admin.pages.comment.list', compact('comments'));
     }
@@ -91,4 +98,5 @@ class CommentController extends Controller
 
         return redirect()->back()->with('message', 'Comment deleted.');
     }
+
 }

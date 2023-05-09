@@ -18,6 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('slug')->unique();
             $table->json('images');
+            $table->unsignedTinyInteger('visibility')->default(1);
+            $table->unsignedInteger('view_count')->default(0);
             $table->timestamps();
 		});
 	}

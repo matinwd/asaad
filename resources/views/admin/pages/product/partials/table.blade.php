@@ -68,6 +68,15 @@
                             </a>
                         </form>
                     </div>
+                    <div class="menu-item px-3">
+                        <form method="POST" action="{{ route('admin.products.hide',$product->id) }}">
+                            @csrf
+                            @method('put')
+                            <button type="submit" href="javascript:" class="btn btn-sm menu-link px-3">
+                                {{ $product->visibility == '1' ? 'Hide it' : 'Visible' }}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </td>
             <!--end::Action=-->

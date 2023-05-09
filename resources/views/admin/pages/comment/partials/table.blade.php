@@ -30,8 +30,8 @@
                    {{ $comment->description }}
             </td>
             <td>
-                  <div class="badge badge-{{ $comment->visibility == 'visible' ? 'light-success' : 'light-info' }}">
-                      {{ $comment->visibility }}
+                  <div class="badge badge-{{ $comment->visibility == '1' ? 'light-success' : 'light-info' }}">
+                      {{ $comment->visibility_status_text }}
                   </div>
             </td>
 
@@ -66,6 +66,16 @@
                             <a href="javascript:" class="menu-link px-3 show-alert-delete-box">
                                 Delete
                             </a>
+                        </form>
+                    </div>
+
+                    <div class="menu-item px-3">
+                        <form method="POST" action="{{ route('admin.comments.hide',$comment->id) }}">
+                            @csrf
+                            @method('put')
+                            <button type="submit" href="javascript:" class="btn btn-sm menu-link px-3">
+                                {{ $comment->visibility == '1' ? 'Hide it' : 'Visible' }}
+                            </button>
                         </form>
                     </div>
                 </div>
