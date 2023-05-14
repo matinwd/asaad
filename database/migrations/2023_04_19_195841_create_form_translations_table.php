@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('form_translations', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('content')->nullable();
+            $table->foreignId('form_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('locale')->index();
             $table->timestamps();
         });
     }

@@ -30,4 +30,12 @@ Route::middleware(['auth','role.basic:admin|developer'])->group(function (){
     Route::put('toggle-post/{id}',[\App\Http\Controllers\Admin\PostController::class,'toggleHide'])->name('posts.hide');
     Route::put('toggle-slider/{id}',[\App\Http\Controllers\Admin\SliderController::class,'toggleHide'])->name('sliders.hide');
     Route::post('file-upload',\App\Http\Controllers\Admin\FileController::class);
+
+    Route::name('settings.')->prefix('settings')->group(function(){
+
+        Route::get('/',[\App\Http\Controllers\Admin\SettingController::class,'site'])->name('site');
+        Route::post('common',[\App\Http\Controllers\Admin\SettingController::class,'commonSettings'])->name('common');
+        Route::post('menu',[\App\Http\Controllers\Admin\SettingController::class,'menuSettings'])->name('menus');
+        Route::post('page',[\App\Http\Controllers\Admin\SettingController::class,'pageSettings'])->name('pages');
+    });
 });

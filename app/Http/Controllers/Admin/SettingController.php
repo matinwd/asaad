@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateCommonSettingRequest;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -24,129 +25,133 @@ class SettingController extends Controller
      */
     protected $repository;
 
-
-    /**
-     * SettingController constructor.
-     *
-     * @param SettingRepository $repository
-     * @param SettingValidator $validator
-     */
     public function __construct(SettingRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function index()
+    public function site()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $settings = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $settings,
-            ]);
-        }
-
-        return view('settings.index', compact('settings'));
+        return view('admin.pages.setting.edit');
     }
 
-
-    public function store(SettingCreateRequest $request)
+    public function commonSettings(UpdateCommonSettingRequest $request)
     {
         try {
+            $title = $this->repository->findWhereIn(function ($query){
+                return $query->where('key', 'title');
+            });
+            $title->value = $request->get('title');
+            $title->save();
 
-            $setting = $this->repository->create($request->all());
+            $description = Setting::where('key', 'description')->first();
+            $description->value = $request->get('description');
+            $description->update();
 
-            $response = [
-                'message' => 'Setting created.',
-                'data'    => $setting->toArray(),
-            ];
+            $address = Setting::where('key', 'address')->first();
+            $address->value = $request->get('address');
+            $address->update();
 
-            if ($request->wantsJson()) {
+            $landline = Setting::where('key', 'landline')->first();
+            $landline->value = $request->get('landline');
+            $landline->update();
 
-                return response()->json($response);
+
+            $landline2 = Setting::where('key', 'landline2')->first();
+            $landline2->value = $request->get('landline2');
+            $landline2->update();
+
+
+            $fax = Setting::where('key', 'fax')->first();
+            $fax->value = $request->get('fax');
+            $fax->update();
+
+            $mobile = Setting::where('key', 'mobile')->first();
+            $mobile->value = $request->get('mobile');
+            $mobile->update();
+
+
+            $email = Setting::where('key', 'email')->first();
+            $email->value = $request->get('email');
+            $email->update();
+
+            $telegram = Setting::where('key', 'telegram')->first();
+            $telegram->value = $request->get('telegram');
+            $telegram->update();
+
+            $instagram = Setting::where('key', 'instagram')->first();
+            $instagram->value = $request->get('instagram');
+            $instagram->update();
+
+            $linkedin = Setting::where('key', 'linkedin')->first();
+            $linkedin->value = $request->get('linkedin');
+            $linkedin->update();
+
+            $whatsapp = Setting::where('key', 'whatsapp')->first();
+            $whatsapp->value = $request->get('whatsapp');
+            $whatsapp->update();
+            if ($request->file('photo')) {
+                $fc = new FileController();
+                $path = $fc->uploadHttps($request);
+                $logo = Setting::where('key', 'logo')->first();
+                $logo->value = $path;
+                $logo->update();
             }
 
-            return redirect()->back()->with('message', $response['message']);
+
+            event(new ActivityEvent(['description' => 'تنظیمات جدید ' . 'توسط ' . auth()->user()->name . ' اعمال شد', 'user_id' => auth()->user()->id]));
+
+            session()->flash('status', 'success');
+            return redirect(route('admin.settings.site'));
+
         } catch (\Exception $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            session()->flash('status', 'failed');
+            return redirect(route('admin.settings.site'));
         }
     }
 
 
-    public function show($id)
+    public function menuChange(Request $request)
     {
-        $setting = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $setting,
-            ]);
-        }
-
-        return view('settings.show', compact('setting'));
-    }
 
 
-    public function edit($id)
-    {
-        $setting = $this->repository->find($id);
-
-        return view('settings.edit', compact('setting'));
-    }
-
-    public function update(SettingUpdateRequest $request, $id)
-    {
+        $menus = Setting::where('key', 'menus')->first();
         try {
 
-            $setting = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Setting updated.',
-                'data'    => $setting->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
+            $arr =  [];
+            foreach ($request->get('menu') as $menu){
+                $arr[] = ['name' => $menu['name'] ,'url' => $menu['url']];
             }
 
-            return redirect()->back()->with('message', $response['message']);
+
+            $menus->value = json_encode($arr);
+            $menus->update();
+
+
+            event(new ActivityEvent(['description' => 'تنظیمات جدید ' . 'توسط ' . auth()->user()->name . ' اعمال شد', 'user_id' => auth()->user()->id]));
+
+            session()->flash('status', 'success');
+            return redirect(route('admin.settings.menu'));
+
         } catch (\Exception $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            session()->flash('status', 'failed');
+            return redirect(route('admin.settings.site'));
         }
     }
 
-    public function destroy($id)
+    public function slider()
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Setting deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Setting deleted.');
+        $sliders = TopSlider::all();
+        return view('admin.setting.sliders', compact('sliders'));
     }
+
+
+    public function menu()
+    {
+        $menus = json_decode(Setting::where('key', 'menus')->first()->value);
+        return view('admin.setting.menus', compact('menus'));
+
+    }
+
+
 }

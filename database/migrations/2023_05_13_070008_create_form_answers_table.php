@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('setting_translations', function (Blueprint $table) {
+        Schema::create('form_answers', function (Blueprint $table) {
             $table->id();
-            $table->text('value');
-            $table->foreignId('setting_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('locale')->index();
+            $table->foreignId('form_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('ip');
+            $table->string('user_agent');
+            $table->text('data');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('setting_translations');
+        Schema::dropIfExists('form_answers');
     }
 };

@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('template_translations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('template_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('locale')->index();
+
+            $table->string('title');
+            $table->string('image')->nullable();
+            $table->text('content')->nullable();
+            $table->text('seo')->nullable();
+
+            $table->unique(['template_id','locale']);
             $table->timestamps();
         });
     }

@@ -54,7 +54,6 @@ class ProductController extends Controller
                 $attributes['price'] = null;
             }
 
-
             $product = $this->repository->create($attributes);
 
             if(isset($attributes['categories'])) {
