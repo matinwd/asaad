@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCommonSettingRequest;
+use App\Http\Requests\UpdateContactWaysRequest;
+use App\Http\Requests\UpdateSocialMediaRequest;
+use App\Traits\FileUploaderTrait;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -20,6 +23,7 @@ use App\Repositories\SettingRepository;
  */
 class SettingController extends Controller
 {
+    use FileUploaderTrait;
     /**
      * @var SettingRepository
      */
@@ -35,91 +39,120 @@ class SettingController extends Controller
         return view('admin.pages.setting.edit');
     }
 
-    public function commonSettings(UpdateCommonSettingRequest $request)
+    public function commonAddresses(UpdateCommonSettingRequest $request)
     {
         try {
-            $title = $this->repository->findWhereIn(function ($query){
-                return $query->where('key', 'title');
-            });
-            $title->value = $request->get('title');
-            $title->save();
 
-            $description = Setting::where('key', 'description')->first();
-            $description->value = $request->get('description');
-            $description->update();
+            $attributes = ['title', 'description', 'address'];
 
-            $address = Setting::where('key', 'address')->first();
-            $address->value = $request->get('address');
-            $address->update();
-
-            $landline = Setting::where('key', 'landline')->first();
-            $landline->value = $request->get('landline');
-            $landline->update();
+            foreach ($attributes as $item){
 
 
-            $landline2 = Setting::where('key', 'landline2')->first();
-            $landline2->value = $request->get('landline2');
-            $landline2->update();
+                $attribute = $this->repository->scopeQuery(function ($query) use ($item){
+                    return $query->where('key', $item)->get();
+                })->all()[0];
 
 
-            $fax = Setting::where('key', 'fax')->first();
-            $fax->value = $request->get('fax');
-            $fax->update();
+                $attribute->translate('en')->value  = $request->en[$item];
+                $attribute->translate('de')->value  = $request->de[$item];
 
-            $mobile = Setting::where('key', 'mobile')->first();
-            $mobile->value = $request->get('mobile');
-            $mobile->update();
+                $attribute->save();
+            }
 
+            if ($request->file('logo')) {
+                $images = $this->saveFiles($request->file('logo'));
 
-            $email = Setting::where('key', 'email')->first();
-            $email->value = $request->get('email');
-            $email->update();
-
-            $telegram = Setting::where('key', 'telegram')->first();
-            $telegram->value = $request->get('telegram');
-            $telegram->update();
-
-            $instagram = Setting::where('key', 'instagram')->first();
-            $instagram->value = $request->get('instagram');
-            $instagram->update();
-
-            $linkedin = Setting::where('key', 'linkedin')->first();
-            $linkedin->value = $request->get('linkedin');
-            $linkedin->update();
-
-            $whatsapp = Setting::where('key', 'whatsapp')->first();
-            $whatsapp->value = $request->get('whatsapp');
-            $whatsapp->update();
-            if ($request->file('photo')) {
-                $fc = new FileController();
-                $path = $fc->uploadHttps($request);
-                $logo = Setting::where('key', 'logo')->first();
-                $logo->value = $path;
-                $logo->update();
+                $logo = $this->repository->scopeQuery(function ($query){
+                    return $query->where('key', 'logo')->get();
+                })->all()[0];
+                $logo->value = $images[0];
+                $logo->save();
             }
 
 
-            event(new ActivityEvent(['description' => 'تنظیمات جدید ' . 'توسط ' . auth()->user()->name . ' اعمال شد', 'user_id' => auth()->user()->id]));
 
-            session()->flash('status', 'success');
-            return redirect(route('admin.settings.site'));
+            $response = [
+                'message' => 'Changes affected',
+                'data'    => true,
+            ];
 
+            return redirect()->route('admin.settings.site')->with('message', $response['message']);
         } catch (\Exception $e) {
             session()->flash('status', 'failed');
             return redirect(route('admin.settings.site'));
         }
     }
 
+    public function commonSocials(UpdateSocialMediaRequest $request)
+    {
+
+        try {
+
+            $attributes = ['telegram', 'instagram', 'whatsapp','linkedin'];
+
+            $this->saveAttribute($attributes,$request);
+
+            $response = [
+                'message' => 'Changes affected',
+                'data'    => true,
+            ];
+
+            return redirect()->route('admin.settings.site')->with('message', $response['message']);
+        } catch (\Exception $e) {
+            session()->flash('status', 'failed');
+            return redirect(route('admin.settings.site'));
+        }
+
+    }
+
+    public function commonContactWays(UpdateContactWaysRequest $request)
+    {
+
+        try {
+
+            $attributes = ['landline', 'landline2', 'mobile','fax','email'];
+
+            $this->saveAttribute($attributes, $request);
+
+            $response = [
+                'message' => 'Changes affected',
+                'data'    => true,
+            ];
+
+            return redirect()->route('admin.settings.site')->with('message', $response['message']);
+        } catch (\Exception $e) {
+            session()->flash('status', 'failed');
+            return redirect(route('admin.settings.site'));
+        }
+
+    }
+
 
     public function menuChange(Request $request)
     {
+
+        try {
+
+
+            $this->saveAttribute($attributes, $request);
+
+            $response = [
+                'message' => 'Changes affected',
+                'data'    => true,
+            ];
+
+            return redirect()->route('admin.settings.site')->with('message', $response['message']);
+        } catch (\Exception $e) {
+            session()->flash('status', 'failed');
+            return redirect(route('admin.settings.site'));
+        }
 
 
         $menus = Setting::where('key', 'menus')->first();
         try {
 
             $arr =  [];
-            foreach ($request->get('menu') as $menu){
+            foreach ($request->en['menu'] as $menu){
                 $arr[] = ['name' => $menu['name'] ,'url' => $menu['url']];
             }
 
@@ -151,6 +184,25 @@ class SettingController extends Controller
         $menus = json_decode(Setting::where('key', 'menus')->first()->value);
         return view('admin.setting.menus', compact('menus'));
 
+    }
+
+    /**
+     * @param array $attributes
+     * @param \Illuminate\Support\Facades\Request $request
+     */
+    public function saveAttribute(array $attributes, \Illuminate\Http\Request $request)
+    {
+        foreach ($attributes as $item) {
+
+
+            $attribute = $this->repository->scopeQuery(function ($query) use ($item) {
+                return $query->where('key', $item)->get();
+            })->all()[0];
+
+            $attribute->value = $request->$item;
+
+            $attribute->save();
+        }
     }
 
 

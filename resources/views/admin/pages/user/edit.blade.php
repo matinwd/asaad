@@ -18,65 +18,39 @@
         <div class="col-12">
             <div class="card border-hover-primary">
                 <div class="card-body min-h-300px">
-                    <form id="kt_modal_add_user_form" class="form" method="post"
-                          action="{{ route('admin.users.update',$user) }}">
+                    <form action="{{ route('cms.menus.update',$menu) }}" method="post">
                         @csrf
-                        @method('put')
-                        <div class="d-flex flex-column scroll-y me-n7 pe-7">
-
-                            <div class="fv-row mb-7">
-                                <label class="required fw-bold fs-6 mb-2">First Name</label>
-                                <input type="text" name="first_name"
-                                       class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="First Name" value="{{ old('first_name',$user->first_name) }}"/>
-                                @error('first_name')
-                                <div class="invalid-feedback d-block">
-                                    {{ $message }}
+                        @method('patch')
+                                <ul class="nav nav-pills">
+                                    @foreach (\App\Helpers\Helper::activeLanguages() as $i => $lang)
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ $i == 0 ? "active" : "" }}"
+                                               id="{{ $lang->code }}-lang-tab" data-toggle="pill"
+                                               href="#{{ $lang->code }}_lang">
+                                                <i class="flag-icon flag-icon-{{ $lang->flag }}"></i>
+                                                {{ $lang->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <div class="tab-content">
+                                    @foreach (\App\Helpers\Helper::activeLanguages() as $i => $lang)
+                                        <div class="tab-pane {{ $i == 0 ? "active" : "" }}" id="{{ $lang->code }}_lang">
+                                            <menu-items input-name="{{ $lang->code }}[items]" :current-items="{{ json_encode($menu->translateOrDefault($lang->code)->vue_items ?? []) }}">
+                                            </menu-items>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                @enderror
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">بروزرسانی</button>
                             </div>
-                            <div class="fv-row mb-7">
-                                <label class="required fw-bold fs-6 mb-2">Last Name</label>
-                                <input type="text" name="last_name" class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="Last Name" value="{{ old('last_name',$user->last_name) }}"/>
-                                @error('last_name')
-                                <div class="invalid-feedback d-block">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="fv-row mb-7">
-                                <label class="required fw-bold fs-6 mb-2">Email</label>
-                                <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="example@domain.com" value="{{ old('email',$user->email) }}"/>
-                                @error('email')
-                                <div class="invalid-feedback d-block">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="fv-row mb-7">
-                                <label class="required fw-bold fs-6 mb-2">Password</label>
-                                <input type="password" name="password"
-                                       class="form-control form-control-solid mb-3 mb-lg-0"
-                                       placeholder="******" value="{{ old('password') }}"/>
-                                @error('password')
-                                <div class="invalid-feedback d-block">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="text-center pt-15">
-                            <button type="reset" class="btn btn-light me-3">Reset</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
                     </form>
                 </div>
-            </div>
+        </div>
         </div>
     </div>
 @stop
 
 @section('page-scripts')
+    <script src="{{ asset('assets/css/tree.jquery.js') }}"></script>
 @stop

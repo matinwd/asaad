@@ -27,8 +27,7 @@
 
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade active show" id="kt_tab_pane_1" role="tabpanel">
-            <form id="kt_modal_add_slider_form" enctype="multipart/form-data" class="form" method="post"
-                  action="{{ route('admin.settings.common') }}">
+
 
 
                 <div class="row g-6 g-xl-9">
@@ -41,236 +40,329 @@
 
 
                                 <div class="d-flex flex-column scroll-y me-n7 pe-7">
-                                    <h3 class="text-right">
-                                        Address and Details
-                                    </h3>
-
-                                    <div class="fv-row mb-7">
 
 
-                                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
-                                            <li class="nav-item p-1">
-                                                <a class="nav-link active" data-bs-toggle="tab" href="#kt_tab_language_common_addresses_1">En</a>
-                                            </li>
-                                            <li class="nav-item p-1">
-                                                <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_language_common_addresses_2">De</a>
-                                            </li>
-                                        </ul>
-
-                                        <div class="tab-content" id="myTabCommonAddressLanguage">
-                                            <div class="tab-pane fade active show" id="kt_tab_language_common_addresses_1" role="tabpanel">
-                                                <div class="fv-row mb-7">
-                                                    <label class="required fw-bold fs-6 mb-2">Title</label>
-                                                    <input type="text" name="en[title]"
-                                                           class="form-control form-control-solid mb-3 mb-lg-0"
-                                                           placeholder="{{ __('Title') }}" value="{{ old('en.title',$settings['title']->translate('en')->value) }}"/>
-                                                    @error('en.title')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                    @enderror
-                                                </div>
-                                                <div class="fv-row mb-7">
-                                                    <label class="required fw-bold fs-6 mb-2">Description (EN)</label>
-                                                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="en[description]" id="description" cols="30" rows="10">{{ old('en.description',$settings['description']->translate('en')->value) }}</textarea>
-                                                    @error('en.description')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                    @enderror
-                                                </div>
-
-                                                <div class="fv-row mb-7">
-                                                    <label class="required fw-bold fs-6 mb-2">Address (EN)</label>
-                                                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="en[address]" id="address" cols="30" rows="10">{{ old('en.address',$settings['address']->translate('en')->value) }}</textarea>
-                                                    @error('en.address')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                    @enderror
-                                                </div>
+                                    <!--begin::Accordion-->
+                                    <div class="accordion accordion-icon-toggle" id="kt_accordion_common">
+                                        <!--begin::Item-->
+                                        <div class="mb-5">
+                                            <!--begin::Header-->
+                                            <div class="accordion-header py-3 d-flex" data-bs-toggle="collapse" data-bs-target="#kt_accordion_common_item_1">
+                                                <span class="accordion-icon">
+                                                    <span class="svg-icon svg-icon-4">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+																		<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+																	</svg>
+                                                    </span>
+                                                </span>
+                                                <h3 class="fs-4 fw-bold mb-0 ms-4">{{ __('Addresses and Details') }}</h3>
                                             </div>
-                                            <div class="tab-pane fade" id="kt_tab_language_common_addresses_2" role="tabpanel">
-                                                <div class="fv-row mb-7">
-                                                    <label class="required fw-bold fs-6 mb-2">Title (DE)</label>
-                                                    <input type="text" name="de[title]"
-                                                           class="form-control form-control-solid mb-3 mb-lg-0"
-                                                           placeholder="{{ __('Title') }}" value="{{ old('de.title',$settings['title']->translate('de')->value) }}"/>
-                                                    @error('de.title')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                    @enderror
-                                                </div>
-                                                <div class="fv-row mb-7">
-                                                    <label class="required fw-bold fs-6 mb-2">Description (DE)</label>
-                                                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="de[description]" id="description" cols="30" rows="10">{{old('de.description',$settings['description']->translate('de')->value)}}</textarea>
-                                                    @error('de.description')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ str_replace('de.description','Dutch Description',$message) }}
-                                                    </div>
-                                                    @enderror
-                                                </div>
+                                            <!--end::Header-->
 
+                                            <!--begin::Body-->
+                                            <div id="kt_accordion_common_item_1" class="fs-6 collapse show ps-10" data-bs-parent="#kt_accordion_common">
                                                 <div class="fv-row mb-7">
-                                                    <label class="required fw-bold fs-6 mb-2">Address (DE)</label>
-                                                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="de[address]" id="address" cols="30" rows="10">{{ old('de.address',$settings['address']->translate('de')->value) }}</textarea>
-                                                    @error('de.address')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
+
+
+                                                    <form id="kt_modal_add_slider_form" enctype="multipart/form-data" class="form" method="post"
+                                                          action="{{ route('admin.settings.common.addresses') }}">
+                                                        @method('put')
+                                                        @csrf
+                                                    <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                                                        <li class="nav-item p-1">
+                                                            <a class="nav-link active" data-bs-toggle="tab" href="#kt_tab_language_common_addresses_1">En</a>
+                                                        </li>
+                                                        <li class="nav-item p-1">
+                                                            <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_language_common_addresses_2">De</a>
+                                                        </li>
+                                                    </ul>
+
+                                                    <div class="tab-content" id="myTabCommonAddressLanguage">
+                                                        <div class="tab-pane fade active show" id="kt_tab_language_common_addresses_1" role="tabpanel">
+                                                            <div class="fv-row mb-7">
+                                                                <label class="required fw-bold fs-6 mb-2">Title</label>
+                                                                <input type="text" name="en[title]"
+                                                                       class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                       placeholder="{{ __('Title') }}" value="{{ old('en.title',$settings['title']->translate('en')->value) }}"/>
+                                                                @error('en.title')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $message }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="fv-row mb-7">
+                                                                <label class="required fw-bold fs-6 mb-2">Description (EN)</label>
+                                                                <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="en[description]" id="description" cols="30" rows="10">{{ old('en.description',$settings['description']->translate('en')->value) }}</textarea>
+                                                                @error('en.description')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $message }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+
+                                                            <div class="fv-row mb-7">
+                                                                <label class="required fw-bold fs-6 mb-2">Address (EN)</label>
+                                                                <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="en[address]" id="address" cols="30" rows="10">{{ old('en.address',$settings['address']->translate('en')->value) }}</textarea>
+                                                                @error('en.address')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $message }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="kt_tab_language_common_addresses_2" role="tabpanel">
+                                                            <div class="fv-row mb-7">
+                                                                <label class="required fw-bold fs-6 mb-2">Title (DE)</label>
+                                                                <input type="text" name="de[title]"
+                                                                       class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                       placeholder="{{ __('Title') }}" value="{{ old('de.title',$settings['title']->translate('de')->value) }}"/>
+                                                                @error('de.title')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $message }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="fv-row mb-7">
+                                                                <label class="required fw-bold fs-6 mb-2">Description (DE)</label>
+                                                                <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="de[description]" id="description" cols="30" rows="10">{{old('de.description',$settings['description']->translate('de')->value)}}</textarea>
+                                                                @error('de.description')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ str_replace('de.description','Dutch Description',$message) }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+
+                                                            <div class="fv-row mb-7">
+                                                                <label class="required fw-bold fs-6 mb-2">Address (DE)</label>
+                                                                <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="de[address]" id="address" cols="30" rows="10">{{ old('de.address',$settings['address']->translate('de')->value) }}</textarea>
+                                                                @error('de.address')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $message }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+
+
+                                                        </div>
                                                     </div>
-                                                    @enderror
+                                                        <div class="fv-row mb-7">
+                                                            <img class="rounded w-100px mb-3" src="{{ url(('storage/' . $settings['logo']->value))  }}" alt="">
+                                                            <br>
+                                                            <label class="required fw-bold fs-6 mb-2">Site Logo</label>
+                                                            <input type="file"  name="logo" class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="example@domain.com" value="{{ old('logo') }}"/>
+                                                            @error('logo')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="text-center pt-15">
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                        </div>
+
+                                                    </form>
+
+
                                                 </div>
 
                                             </div>
+                                            <!--end::Body-->
                                         </div>
+                                        <!--end::Item-->
 
-
-                                    </div>
-                                    <hr>
-
-                                    <h3 class="text-right mb-5">
-                                        Contact ways
-                                    </h3>
-
-                                    <div class="row mb-7">
-                                         <div class="col">
-                                             <label class="required fw-bold fs-6 mb-2">Email</label>
-                                             <input type="text" name="email"
-                                                    class="form-control form-control-solid mb-3 mb-lg-0"
-                                                    placeholder="{{ __('Email') }}" value="{{ old('email',$settings['email']->value) }}"/>
-                                             @error('email')
-                                             <div class="invalid-feedback d-block">
-                                                 {{ $message }}
-                                             </div>
-                                             @enderror
-                                         </div>
-                                         <div class="col">
-                                             <label class="required fw-bold fs-6 mb-2">Mobile</label>
-                                             <input type="text" name="mobile"
-                                                    class="form-control form-control-solid mb-3 mb-lg-0"
-                                                    placeholder="{{ __('Mobile Phone Number') }}" value="{{ old('mobile',$settings['mobile']->value) }}"/>
-                                             @error('mobile')
-                                             <div class="invalid-feedback d-block">
-                                                 {{ $message }}
-                                             </div>
-                                             @enderror
-                                         </div>
-                                    </div>
-                                    <div class="row mb-7">
-                                         <div class="col">
-                                             <label class="required fw-bold fs-6 mb-2">Landline 1</label>
-                                             <input type="text" name="landline"
-                                                    class="form-control form-control-solid mb-3 mb-lg-0"
-                                                    placeholder="{{ __('Landline ') }}" value="{{ old('landline1',$settings['landline']->value) }}"/>
-                                             @error('landline')
-                                             <div class="invalid-feedback d-block">
-                                                 {{ $message }}
-                                             </div>
-                                             @enderror
-                                         </div>
-                                        <div class="col">
-                                            <label class="fw-bold fs-6 mb-2">Landline 2</label>
-                                            <input type="text" name="landline2"
-                                                   class="form-control form-control-solid mb-3 mb-lg-0"
-                                                   placeholder="{{ __('Landline 2') }}" value="{{ old('landline2',$settings['landline2']->value) }}"/>
-                                            @error('landline2')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
+                                        <!--begin::Item-->
+                                        <div class="mb-5">
+                                            <!--begin::Header-->
+                                            <div class="accordion-header py-3 d-flex collapsed" data-bs-toggle="collapse" data-bs-target="#kt_accordion_common_item_2">
+                                                <span class="accordion-icon"><span class="svg-icon svg-icon-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+																		<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+																	</svg></span></span>
+                                                <h3 class="fs-4 fw-bold mb-0 ms-4">{{ __('Contact ways') }}</h3>
                                             </div>
-                                            @enderror
+                                            <!--end::Header-->
+
+                                            <!--begin::Body-->
+                                            <div id="kt_accordion_common_item_2" class="collapse fs-6 ps-10" data-bs-parent="#kt_accordion_common">
+                                                <form id="kt_modal_add_slider_form" enctype="multipart/form-data" class="form" method="post"
+                                                      action="{{ route('admin.settings.common.contact-ways') }}">
+                                                    @method('put')
+                                                    @csrf
+                                                    <div class="row mb-7">
+
+                                                            <div class="col">
+                                                                <label class="required fw-bold fs-6 mb-2">Email</label>
+                                                                <input type="text" name="email"
+                                                                       class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                       placeholder="{{ __('Email') }}" value="{{ old('email',$settings['email']->value) }}"/>
+                                                                @error('email')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $message }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="col">
+                                                                <label class="required fw-bold fs-6 mb-2">Mobile</label>
+                                                                <input type="text" name="mobile"
+                                                                       class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                       placeholder="{{ __('Mobile Phone Number') }}" value="{{ old('mobile',$settings['mobile']->value) }}"/>
+                                                                @error('mobile')
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $message }}
+                                                                </div>
+                                                                @enderror
+                                                            </div>
+                                                    </div>
+                                                    <div class="row mb-7">
+                                                        <div class="col">
+                                                            <label class="required fw-bold fs-6 mb-2">Landline 1</label>
+                                                            <input type="text" name="landline"
+                                                                   class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="{{ __('Landline ') }}" value="{{ old('landline1',$settings['landline']->value) }}"/>
+                                                            @error('landline')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col">
+                                                            <label class="fw-bold fs-6 mb-2">Landline 2</label>
+                                                            <input type="text" name="landline2"
+                                                                   class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="{{ __('Landline 2') }}" value="{{ old('landline2',$settings['landline2']->value) }}"/>
+                                                            @error('landline2')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col">
+                                                            <label class="required fw-bold fs-6 mb-2">Fax</label>
+                                                            <input type="text" name="fax"
+                                                                   class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="{{ __('Fax') }}" value="{{ old('fax',$settings['fax']->value) }}"/>
+                                                            @error('fax')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="text-center pt-15">
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                            <!--end::Body-->
                                         </div>
-                                        <div class="col">
-                                            <label class="required fw-bold fs-6 mb-2">Fax</label>
-                                            <input type="text" name="fax"
-                                                   class="form-control form-control-solid mb-3 mb-lg-0"
-                                                   placeholder="{{ __('Fax') }}" value="{{ old('fax',$settings['fax']->value) }}"/>
-                                            @error('fax')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
+                                        <!--end::Item-->
+
+                                        <!--begin::Item-->
+                                        <div class="mb-5">
+                                            <!--begin::Header-->
+                                            <div class="accordion-header py-3 d-flex collapsed" data-bs-toggle="collapse" data-bs-target="#kt_accordion_common_item_3">
+                                                <span class="accordion-icon"><span class="svg-icon svg-icon-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																		<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+																		<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+																	</svg></span></span>
+                                                <h3 class="fs-4 fw-bold mb-0 ms-4">{{ __('Social Media') }}</h3>
                                             </div>
-                                            @enderror
+                                            <!--end::Header-->
+
+                                            <!--begin::Body-->
+                                            <div id="kt_accordion_common_item_3" class="collapse fs-6 ps-10" data-bs-parent="#kt_accordion_common">
+
+                                                <form id="kt_modal_add_slider_form" enctype="multipart/form-data" class="form" method="post"
+                                                      action="{{ route('admin.settings.common.socials') }}">
+                                                    @method('put')
+                                                    @csrf
+                                                    <div class="row mb-7">
+                                                        <div class="col">
+                                                            <label class="required fw-bold fs-6 mb-2">Telegram</label>
+                                                            <input type="text" name="telegram"
+                                                                   class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="{{ __('Telegram ID') }}" value="{{ old('telegram',$settings['telegram']->value) }}"/>
+                                                            @error('telegram')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col">
+                                                            <label class="required fw-bold fs-6 mb-2">Instagram</label>
+                                                            <input type="text" name="instagram"
+                                                                   class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="{{ __('Mobile Phone Number') }}" value="{{ old('instagram',$settings['instagram']->value) }}"/>
+                                                            @error('instagram')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-7">
+                                                        <div class="col">
+                                                            <label class="required fw-bold fs-6 mb-2">Linked In</label>
+                                                            <input type="text" name="linkedin"
+                                                                   class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="{{ __('Linked In ID') }}" value="{{ old('linkedin',$settings['linkedin']->value) }}"/>
+                                                            @error('linkedin')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col">
+                                                            <label class="fw-bold fs-6 mb-2">Whatsapp</label>
+                                                            <input type="text" name="whatsapp"
+                                                                   class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                   placeholder="{{ __('Whatsapp') }}" value="{{ old('whatsapp',$settings['whatsapp']->value) }}"/>
+                                                            @error('whatsapp')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                            @enderror
+                                                        </div>
+                                                        {{--  <div class="col">
+                                                              <label class="required fw-bold fs-6 mb-2">Twitter</label>
+                                                              <input type="text" name="twitter"
+                                                                     class="form-control form-control-solid mb-3 mb-lg-0"
+                                                                     placeholder="{{ __('Twitter') }}" value="{{ old('twitter',$settings['twitter']->value) }}"/>
+                                                              @error('twitter')
+                                                              <div class="invalid-feedback d-block">
+                                                                  {{ $message }}
+                                                              </div>
+                                                              @enderror
+                                                          </div>--}}
+                                                    </div>
+
+                                                    <div class="text-center pt-15">
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+                                            <!--end::Body-->
                                         </div>
+                                        <!--end::Item-->
                                     </div>
+                                    <!--end::Accordion-->
 
-                                    <hr>
 
-
-                                    <h3 class="text-right  mb-5">
-                                        Social Media
-                                    </h3>
-
-                                    <div class="row mb-7">
-                                         <div class="col">
-                                             <label class="required fw-bold fs-6 mb-2">Telegram</label>
-                                             <input type="text" name="telegram"
-                                                    class="form-control form-control-solid mb-3 mb-lg-0"
-                                                    placeholder="{{ __('Telegram ID') }}" value="{{ old('telegram',$settings['telegram']->value) }}"/>
-                                             @error('telegram')
-                                             <div class="invalid-feedback d-block">
-                                                 {{ $message }}
-                                             </div>
-                                             @enderror
-                                         </div>
-                                         <div class="col">
-                                             <label class="required fw-bold fs-6 mb-2">Instagram</label>
-                                             <input type="text" name="instagram"
-                                                    class="form-control form-control-solid mb-3 mb-lg-0"
-                                                    placeholder="{{ __('Mobile Phone Number') }}" value="{{ old('instagram',$settings['instagram']->value) }}"/>
-                                             @error('instagram')
-                                             <div class="invalid-feedback d-block">
-                                                 {{ $message }}
-                                             </div>
-                                             @enderror
-                                         </div>
-                                    </div>
-                                    <div class="row mb-7">
-                                         <div class="col">
-                                             <label class="required fw-bold fs-6 mb-2">Linked In</label>
-                                             <input type="text" name="linkedin"
-                                                    class="form-control form-control-solid mb-3 mb-lg-0"
-                                                    placeholder="{{ __('Linked In ID') }}" value="{{ old('linkedin',$settings['linkedin']->value) }}"/>
-                                             @error('linkedin')
-                                             <div class="invalid-feedback d-block">
-                                                 {{ $message }}
-                                             </div>
-                                             @enderror
-                                         </div>
-                                        <div class="col">
-                                            <label class="fw-bold fs-6 mb-2">Whatsapp</label>
-                                            <input type="text" name="whatsapp"
-                                                   class="form-control form-control-solid mb-3 mb-lg-0"
-                                                   placeholder="{{ __('Whatsapp') }}" value="{{ old('whatsapp',$settings['whatsapp']->value) }}"/>
-                                            @error('whatsapp')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-                                      {{--  <div class="col">
-                                            <label class="required fw-bold fs-6 mb-2">Twitter</label>
-                                            <input type="text" name="twitter"
-                                                   class="form-control form-control-solid mb-3 mb-lg-0"
-                                                   placeholder="{{ __('Twitter') }}" value="{{ old('twitter',$settings['twitter']->value) }}"/>
-                                            @error('twitter')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>--}}
-                                    </div>
-
-                                    <div class="text-center pt-15">
-                                        <button type="reset" class="btn btn-light me-3">Reset</button>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
+
         </div>
         <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
             <form id="kt_modal_add_slider_form" enctype="multipart/form-data" class="form" method="post"
@@ -353,6 +445,7 @@
 
                                                 </div>
                                             @endforeach
+                                            <button type="button" class="btn btn-outline-info" onclick="addMenu('EN')">Add Menu</button>
 
                                         </div>
                                         <div class="tab-pane fade" id="kt_tab_language_menus_2" role="tabpanel">
@@ -408,6 +501,8 @@
 
                                                 </div>
                                             @endforeach
+                                                <button type="button" class="btn btn-outline-info" onclick="addMenu('DE')">Add Menu</button>
+
                                         </div>
                                     </div>
 
@@ -420,7 +515,6 @@
 
 
                                 <div class="text-center pt-15">
-                                    <button type="reset" class="btn btn-light me-3">Reset</button>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
@@ -899,7 +993,6 @@
 
                                 </div>
                                 <div class="text-center pt-15">
-                                    <button type="reset" class="btn btn-light me-3">Reset</button>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
@@ -930,12 +1023,12 @@
         }
 
 
-        function addMenu(){
+        function addMenu(locale){
             let id = randomIntFromInterval(100,1000000);
-            document.getElementById('menusRow').innerHTML += `<div class="row" id="menu${id}">
+            document.getElementById(locale + 'menusRow').innerHTML += `<div class="row" id="${locale}menu${id}">
                                                     <div class="col-4">
                                                         <div class="mb-3">
-                                                            <input style="display: block" type="text" name="menu[${id}][name]" class="form-control mb-3" placeholder="نام منو" value="" aria-label="Username">
+                                                            <input style="display: block" type="text" name="[${id}][name]" class="form-control mb-3" placeholder="نام منو" value="" aria-label="Username">
 
                                                                                                                     </div>
 

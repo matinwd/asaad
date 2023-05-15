@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helper;
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

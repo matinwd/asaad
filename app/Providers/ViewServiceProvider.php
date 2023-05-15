@@ -22,6 +22,9 @@ class ViewServiceProvider extends ServiceProvider
     public function boot(SettingRepository $repository): void
     {
 
+        if(env('APP_ENV') != 'local'){
+            return ;
+        }
         // Todo | change models to repository
         $logo = $setting = $repository->findWhere(['key'=> 'logo'])->first();
 

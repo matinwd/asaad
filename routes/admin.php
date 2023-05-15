@@ -24,6 +24,7 @@ Route::middleware(['auth','role.basic:admin|developer'])->group(function (){
     Route::resource('questions',\App\Http\Controllers\Admin\QuestionController::class);
     Route::resource('comments',\App\Http\Controllers\Admin\CommentController::class);
     Route::resource('posts',\App\Http\Controllers\Admin\PostController::class);
+    Route::resource('menus',\App\Http\Controllers\Admin\MenuController::class);
     Route::resource('sliders',\App\Http\Controllers\Admin\SliderController::class);
     Route::put('toggle-product/{id}',[\App\Http\Controllers\Admin\ProductController::class,'toggleHide'])->name('products.hide');
     Route::put('toggle-comment/{id}',[\App\Http\Controllers\Admin\CommentController::class,'toggleHide'])->name('comments.hide');
@@ -34,7 +35,9 @@ Route::middleware(['auth','role.basic:admin|developer'])->group(function (){
     Route::name('settings.')->prefix('settings')->group(function(){
 
         Route::get('/',[\App\Http\Controllers\Admin\SettingController::class,'site'])->name('site');
-        Route::post('common',[\App\Http\Controllers\Admin\SettingController::class,'commonSettings'])->name('common');
+        Route::put('common-addresses',[\App\Http\Controllers\Admin\SettingController::class,'commonAddresses'])->name('common.addresses');
+        Route::put('common-socials',[\App\Http\Controllers\Admin\SettingController::class,'commonSocials'])->name('common.socials');
+        Route::put('common-contact-ways',[\App\Http\Controllers\Admin\SettingController::class,'commonContactWays'])->name('common.contact-ways');
         Route::post('menu',[\App\Http\Controllers\Admin\SettingController::class,'menuSettings'])->name('menus');
         Route::post('page',[\App\Http\Controllers\Admin\SettingController::class,'pageSettings'])->name('pages');
     });
